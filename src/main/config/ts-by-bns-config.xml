@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dataControlProvider" class="org.springframework.remoting.rmi.RmiProxyFactoryBean" lazy-init="true" >
+        <property name="serviceUrl" value="${datacontrol.providerUri}" />
+        <property name="serviceInterface" value="ru.csbi.transport.services2.datactl.sub.DataProvider" />
+        <property name="refreshStubOnConnectFailure" value="true" />
+        <property name="lookupStubOnStartup" value="false" />
+    </bean>
+
+
+    <bean id="transportByBnsService" class="ru.csbi.transport.petrosoft.externalapi.sq.TransportByBnsServiceImpl">
+        <property name="service" ref="dbService"/>
+    </bean>
+
+    <bean id="dbService" class="ru.csbi.transport.petrosoft.externalapi.sq.DBServiceImpl">
+        <property name="dataControl" ref="dataControlProvider"/>
+    </bean>
+
+</beans>
